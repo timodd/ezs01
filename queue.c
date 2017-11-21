@@ -26,18 +26,18 @@ q_node* q_add(queue *q, process *p)
 }
 q_node* q_remove(queue *q)
 {
-   q_node* qn_removed = calloc(1, sizeof(q_node));
+   q_node* removed = calloc(1, sizeof(q_node));
    q_node* tmp = calloc(1, sizeof(q_node));
-   qn_removed = q->start;
+   removed = q->start;
    tmp = q->end;
-   q->start = NULL;
-   while(tmp->next)
+   while(tmp->next!=q->start)
    {
       tmp = tmp->next;
    }
    q->start = tmp;
+   q->start->next = NULL;
    free(tmp);
-   return qn_removed;
+   return removed;
 }
 void q_print(queue *q)
 {
