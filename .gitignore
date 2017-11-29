@@ -1,0 +1,10 @@
+*.o
+*.layout
+*.depend
+*.cbp
+*.swp
+ezs01
+demos
+queuedemo
+1.txt
+

@@ -1,10 +1,12 @@
 #pragma once
-
-typedef struct
+# include "queue.h"
+# include "process.h"
+struct pctx
 {
 queue *qready;
 process *running;
-} pctx;
+};
+typedef struct pctx pctx;
 
 void print (pctx *ctx);
 void step(pctx *ctx);

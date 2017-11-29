@@ -1,15 +1,14 @@
 #include "queue.h"
 #include <stdlib.h>
 #include <stdio.h>
-/*why comes the warning: assignement from incompatible pointer-type [-W[...]] on line 20, 28,29 and 38 ?*/
+
 q_node* q_add(queue *q, process *p)
 {
    if (q == NULL || p == NULL)
       return NULL;
-   /*a new node is dynamically added to the queue on each call of q_add. */
    q_node *node = calloc(1, sizeof(q_node));
    node->p = p;
-   node->next = NULL; //the first node->next will always point to NULL
+   node->next = NULL;
    if (q->start == NULL) //if this is the first node
    {
       q->start = node; //q->start points to first node
@@ -17,45 +16,41 @@ q_node* q_add(queue *q, process *p)
    }
    else
    {
-      node->next = q->end; // points to node which was created on the previous call of q_add
-      q->end = node; // points to the current node
-//      if (q->start->next == NULL)
-//         q->start->next = node;
+	 q->end->next = node; //end still points to previous node(next is current)
+   	 q->end = node; // now end points to current node (end->next to NULL)
    }
    return node;
 }
-q_node* q_remove(queue *q)
+
+
+
+process* q_remove(queue *q)
 {
-   q_node* removed = calloc(1, sizeof(q_node));
-   q_node* tmp = calloc(1, sizeof(q_node));
-   removed = q->start;
-   tmp = q->end;
-   while(tmp->next!=q->start)
-   {
-      tmp = tmp->next;
-   }
-   q->start = tmp;
-   q->start->next = NULL;
+   process* removed;
+   q_node* tmp;
+   removed = q->start->p;
+   tmp = q->start;
+   if (removed == NULL || tmp == NULL) return NULL;
+   q->start = q->start->next; 
    free(tmp);
    return removed;
 }
+
+
 void q_print(queue *q)
 {
-   char *st[] = {"READY", "RUNNING"};
-   printf("Warteschlange: %d\n\n", q->id);
-   q_node* tmp = calloc(1, sizeof(q_node));
-   tmp = q->end;
+   q_node* tmp = q->start;
    while(tmp)
    {
-      printf("Prozess_ID: %d  Status: %s\n", tmp->p->p_id, st[tmp->p->p_state]);
+      p_print(tmp->p);	   
       tmp = tmp->next;
    }
    printf("\n");
-   free(tmp);
 }
-void q_init(queue *q, int id)
+
+
+void q_init(queue *q)
 {
    q->start = NULL;
    q->end = NULL;
-   q->id = id;
 }
